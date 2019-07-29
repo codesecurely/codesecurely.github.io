@@ -1,14 +1,14 @@
 ---
 layout: post
 title:  "$PATH and Linux privilege escalation"
-description: "A note concerning privilege escalation in Linux abusing path priorities."
+description: "A note concerning privilege escalation in Linux by abusing path priorities."
 ---
 
 # Path priority is important
 
 A short note on why write permission could be a recipe for disaster.
 
-When Linux looks for a path to execute binary called like:
+When Linux is looking for a path to execute binary called like:
 
 ```console
 marek@marek-mint:~$ python
@@ -33,7 +33,7 @@ marek@marek-mint:~$ file /usr/sbin/python
 marek@marek-mint:~$ file /usr/bin/python
 /usr/bin/python: symbolic link to python2.7
 ```
-Found a symlink, executes then, the actual binary is:
+Found a symlink, executes, the actual binary is:
 
 ```console
 marek@marek-mint:~$ readlink -f /usr/bin/python
@@ -44,7 +44,7 @@ Apparently there.
 
 # Privilege escalation
 
-This method may be used to escalate privileges if our user has write permission to a directory another user or even root executed binaries from. So if let's say root executes a perl script and we can't tamper with the script maybe we can tamper with the interpreter binary itself. If it's possible to replace the binary with eg. a bash script with commands to execute, they will execute as root and escalate the privileges this way.
+This method may be used to escalate privileges if our user has write permission to a directory another user or even root executed binaries from. So if let's say root executes a perl script and we can't tamper with the script maybe we can tamper with the interpreter binary itself. If it's possible to replace the binary with eg. a bash script with commands to execute, they will execute as root and escalate privileges this way.
 
 There may be a situation we don't even have to overwrite the binary, because if we put a malicious script named "perl" in a location that takes precedence in the PATH eg. */usr/local/sbin/perl* then it will be executed instead. Always look for writable locations during privilege escalation attempts.
 
@@ -80,4 +80,4 @@ python -c 'import pty; pty.spawn("/bin/bash")'
 ```
 Of course nc might have not been installed on the remote box but any available command may be called as root this way. You may for example push your public key to authorized_keys of another user or root and login with SSH.
 
-I've learned this during my [HackTheBox](https://hackthebox.eu) hacking attempts, a platform which I recommend as it has a great number of machines and challenges and supportive community.
+I've learned this during my [HackTheBox](https://hackthebox.eu) hacking attempts, a platform which I recommend as it has a great number of machines and challenges and a supportive community.
