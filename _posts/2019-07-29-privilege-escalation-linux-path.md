@@ -2,7 +2,7 @@
 layout: post
 title:  "$PATH and Linux privilege escalation"
 description: "A note concerning privilege escalation in Linux by abusing path priorities."
-tag: linux, privesc
+tag: linux privesc
 ---
 
 # Path priority is important
