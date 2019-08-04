@@ -9,6 +9,8 @@ tag: [linux, privesc]
 
 A short note on why write permission could be a recipe for disaster.
 
+Privilege escalation is the process of elevating privileges on a computer system in an unauthorized way. For instance, we could have a legitimate user account and attempt to exploit a misconfiguration or even a vulnerable kernel (see [DirtyCow exploit](https://www.exploit-db.com/exploits/40616)). In penetration testing, there is often a situation in which we gain access to a system shell, but the shell is limited to user with low-privileges. Let's say we have sucessfully exploited a command injection vulnerability on a web server, have a reverse shell, but the shell belongs to the *www-data* user. Our goal is to escalate from here to root. This post is about a particular method abusing a misconfiguration and the PATH env variable mechanism and a legitimate cronjob running as root.
+
 When Linux is looking for a path to execute binary called like:
 
 ```console
@@ -57,7 +59,7 @@ find / -perm -o w -type d 2>/dev/null     # world-writeable folders
 ```
 Source: [g0tm1k](http://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation)
 
-So there was a script running as root with cron calling "uname". I created an executable script:
+So there was a script running as root with cron calling "uname". Notice that "uname" is just a built-in system program so the administrator trusted it to be harmless. I created an executable script:
 
 ```console
 user@remotemachine:~$ cat uname
